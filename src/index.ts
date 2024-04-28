@@ -17,10 +17,24 @@ app.listen(serverConfig.PORT, () => {
   console.log(`Server Is Running On Port: ${serverConfig.PORT}`);
 
   sampleWorker("SampleQueue");
-  sampleQueueProducer("SampleJob", {
-    name: "Mohit",
-    company: "Microsoft",
-    position: "SDE-2",
-    location: "Remote",
-  });
+  sampleQueueProducer(
+    "SampleJob",
+    {
+      name: "Sarthak",
+      company: "Razorpay",
+      position: "PM-2",
+      location: "BLR",
+    },
+    2
+  );
+  sampleQueueProducer(
+    "SampleJob",
+    {
+      name: "Sanket",
+      company: "Microsoft",
+      position: "SDE-2",
+      location: "Remote",
+    },
+    1
+  );
 });
