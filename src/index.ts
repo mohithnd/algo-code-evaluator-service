@@ -1,5 +1,6 @@
 import express, { Express } from "express";
 
+import bullBoardAdapter from "./config/bullBoard.config";
 import serverConfig from "./config/server.config";
 import sampleQueueProducer from "./producers/sample.producer";
 import apiRouter from "./routes";
@@ -13,8 +14,13 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", apiRouter);
 
+app.use("/queues", bullBoardAdapter.getRouter());
+
 app.listen(serverConfig.PORT, () => {
   console.log(`Server Is Running On Port: ${serverConfig.PORT}`);
+  console.log(
+    `BullBoard Dashboard Is Running On: http://localhost:${serverConfig.PORT}/queues`
+  );
 
   sampleWorker("SampleQueue");
   sampleQueueProducer(
