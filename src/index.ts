@@ -2,6 +2,7 @@ import express, { Express } from "express";
 
 import bullBoardAdapter from "./config/bullBoard.config";
 import serverConfig from "./config/server.config";
+import runPython from "./containers/runPythonDocker";
 import sampleQueueProducer from "./producers/sample.producer";
 import apiRouter from "./routes";
 import sampleWorker from "./workers/sample.worker";
@@ -23,6 +24,19 @@ app.listen(serverConfig.PORT, () => {
   );
 
   sampleWorker("SampleQueue");
+
+  const code = `x = input()
+y = input()
+print("value of x is", x)
+print("value of y is", y)
+`;
+
+  const inputCase = `100
+200
+`;
+
+  runPython(code, inputCase);
+
   sampleQueueProducer(
     "SampleJob",
     {
