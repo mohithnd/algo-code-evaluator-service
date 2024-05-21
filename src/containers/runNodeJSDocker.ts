@@ -1,40 +1,33 @@
-import { PYTHON_IMAGE } from "../utils/constants";
+import { NODEJS_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import decodeDockerStream from "./dockerHelper";
 
-async function runPython(code: string, inputTestCase: string) {
+async function runNodeJS(code: string, inputTestCase: string) {
   const rawLogBuffer: Buffer[] = [];
 
-  console.log("Initialising A New Python Docker Container");
+  console.log("Initialising A New Node.js Docker Container");
 
   const runCommand = `echo '${code.replace(
     /'/g,
     `'\\"`
-  )}' > test.py && echo '${inputTestCase.replace(
+  )}' > test.js && echo '${inputTestCase.replace(
     /'/g,
     `'\\"`
-  )}' | python3 test.py`;
+  )}' | node test.js`;
 
   console.log(runCommand);
 
-  // const pythonDockerContainer = await createContainer(PYTHON_IMAGE, [
-  //   "python3",
-  //   "-c",
-  //   code,
-  //   "stty -echo",
-  // ]);
-
-  const pythonDockerContainer = await createContainer(PYTHON_IMAGE, [
+  const nodejsDockerContainer = await createContainer(NODEJS_IMAGE, [
     "/bin/sh",
     "-c",
     runCommand,
   ]);
 
-  await pythonDockerContainer.start();
+  await nodejsDockerContainer.start();
 
-  console.log("Started The Python Docker Container");
+  console.log("Started The NodeJS Docker Container");
 
-  const loggerStream = await pythonDockerContainer.logs({
+  const loggerStream = await nodejsDockerContainer.logs({
     stdout: true,
     stderr: true,
     timestamps: false,
@@ -59,7 +52,7 @@ async function runPython(code: string, inputTestCase: string) {
     });
   });
 
-  await pythonDockerContainer.remove();
+  await nodejsDockerContainer.remove();
 }
 
-export default runPython;
+export default runNodeJS;
