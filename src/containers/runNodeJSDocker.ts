@@ -1,6 +1,7 @@
 import { NODEJS_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import decodeDockerStream from "./dockerHelper";
+import pullImage from "./pullImage";
 
 async function runNodeJS(code: string, inputTestCase: string) {
   const rawLogBuffer: Buffer[] = [];
@@ -16,6 +17,8 @@ async function runNodeJS(code: string, inputTestCase: string) {
   )}' | node test.js`;
 
   console.log(runCommand);
+
+  await pullImage(NODEJS_IMAGE);
 
   const nodejsDockerContainer = await createContainer(NODEJS_IMAGE, [
     "/bin/sh",

@@ -1,6 +1,7 @@
 import { PYTHON_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import decodeDockerStream from "./dockerHelper";
+import pullImage from "./pullImage";
 
 async function runPython(code: string, inputTestCase: string) {
   const rawLogBuffer: Buffer[] = [];
@@ -16,6 +17,8 @@ async function runPython(code: string, inputTestCase: string) {
   )}' | python3 test.py`;
 
   console.log(runCommand);
+
+  await pullImage(PYTHON_IMAGE);
 
   // const pythonDockerContainer = await createContainer(PYTHON_IMAGE, [
   //   "python3",

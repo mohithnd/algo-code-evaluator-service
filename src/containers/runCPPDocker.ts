@@ -1,6 +1,7 @@
 import { CPP_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import decodeDockerStream from "./dockerHelper";
+import pullImage from "./pullImage";
 
 async function runCpp(code: string, inputTestCase: string) {
   const rawLogBuffer: Buffer[] = [];
@@ -16,6 +17,8 @@ async function runCpp(code: string, inputTestCase: string) {
   )}' | stdbuf -oL -eL ./test`;
 
   console.log(runCommand);
+
+  await pullImage(CPP_IMAGE);
 
   const cppDockerContainer = await createContainer(CPP_IMAGE, [
     "/bin/sh",
