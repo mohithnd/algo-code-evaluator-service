@@ -1,6 +1,7 @@
 import { JAVA_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import decodeDockerStream from "./dockerHelper";
+import isImagePresent from "./isImagePresent";
 import pullImage from "./pullImage";
 
 async function runJava(code: string, inputTestCase: string) {
@@ -18,7 +19,9 @@ async function runJava(code: string, inputTestCase: string) {
 
   console.log(runCommand);
 
-  await pullImage(JAVA_IMAGE);
+  if (!(await isImagePresent(JAVA_IMAGE))) {
+    await pullImage(JAVA_IMAGE);
+  }
 
   const javaDockerContainer = await createContainer(JAVA_IMAGE, [
     "/bin/sh",

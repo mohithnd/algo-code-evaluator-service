@@ -1,6 +1,7 @@
 import { CPP_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import decodeDockerStream from "./dockerHelper";
+import isImagePresent from "./isImagePresent";
 import pullImage from "./pullImage";
 
 async function runCpp(code: string, inputTestCase: string) {
@@ -18,7 +19,9 @@ async function runCpp(code: string, inputTestCase: string) {
 
   console.log(runCommand);
 
-  await pullImage(CPP_IMAGE);
+  if (!(await isImagePresent(CPP_IMAGE))) {
+    await pullImage(CPP_IMAGE);
+  }
 
   const cppDockerContainer = await createContainer(CPP_IMAGE, [
     "/bin/sh",

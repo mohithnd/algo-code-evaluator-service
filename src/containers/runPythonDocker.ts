@@ -1,6 +1,7 @@
 import { PYTHON_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import decodeDockerStream from "./dockerHelper";
+import isImagePresent from "./isImagePresent";
 import pullImage from "./pullImage";
 
 async function runPython(code: string, inputTestCase: string) {
@@ -18,7 +19,9 @@ async function runPython(code: string, inputTestCase: string) {
 
   console.log(runCommand);
 
-  await pullImage(PYTHON_IMAGE);
+  if (!(await isImagePresent(PYTHON_IMAGE))) {
+    await pullImage(PYTHON_IMAGE);
+  }
 
   // const pythonDockerContainer = await createContainer(PYTHON_IMAGE, [
   //   "python3",
