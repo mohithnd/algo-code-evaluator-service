@@ -41,7 +41,7 @@ async function runJava(code: string, inputTestCase: string) {
     rawLogBuffer.push(chunk);
   });
 
-  await new Promise((res) => {
+  const response = await new Promise((res) => {
     loggerStream.on("end", () => {
       console.log(rawLogBuffer);
 
@@ -56,6 +56,8 @@ async function runJava(code: string, inputTestCase: string) {
   });
 
   await javaDockerContainer.remove();
+
+  return response;
 }
 
 export default runJava;
