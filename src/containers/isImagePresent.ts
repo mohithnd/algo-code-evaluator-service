@@ -1,6 +1,8 @@
 import Docker from "dockerode";
 
-export default async function isImagePresent(imageName: string) {
+export default async function isImagePresent(
+  imageName: string
+): Promise<boolean> {
   const docker = new Docker();
 
   const allImages = await docker.listImages();

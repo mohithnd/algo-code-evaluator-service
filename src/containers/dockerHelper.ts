@@ -1,4 +1,4 @@
-import DockerStreamOutput from "../types/dockerStreamOutput";
+import { DockerStreamOutput } from "../types/dockerStreamOutput";
 import { DOCKER_STREAM_HEADER_SIZE } from "../utils/constants";
 
 export default function decodeDockerStream(buffer: Buffer): DockerStreamOutput {

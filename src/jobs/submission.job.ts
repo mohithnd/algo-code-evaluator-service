@@ -4,6 +4,7 @@ import runCpp from "../containers/runCPPDocker";
 import runJava from "../containers/runJavaDocker";
 import runNodeJS from "../containers/runNodeJSDocker";
 import runPython from "../containers/runPythonDocker";
+import resultQueueProducer from "../producers/result.producer";
 import { IJob } from "../types/bullmq.jobDefinition";
 import { SubmissionPayload } from "../types/submissionPayload";
 
@@ -18,6 +19,7 @@ export default class SubmissionJob implements IJob {
 
   handle = async (job?: Job) => {
     console.log("Handler of The Submission Job Called");
+
     if (job) {
       const key = Object.keys(this.payload)[0];
 
@@ -28,31 +30,44 @@ export default class SubmissionJob implements IJob {
           this.payload[key].code,
           this.payload[key].inputCase
         );
+
         console.log("Evaluation Response:-", response);
+
+        resultQueueProducer({ id: key, ...response });
       } else if (this.payload[key].language === "JAVA") {
         const response = await runJava(
           this.payload[key].code,
           this.payload[key].inputCase
         );
+
         console.log("Evaluation Response:-", response);
+
+        resultQueueProducer({ id: key, ...response });
       } else if (this.payload[key].language === "PYTHON") {
         const response = await runPython(
           this.payload[key].code,
           this.payload[key].inputCase
         );
+
         console.log("Evaluation Response:-", response);
+
+        resultQueueProducer({ id: key, ...response });
       } else if (this.payload[key].language === "NODEJS") {
         const response = await runNodeJS(
           this.payload[key].code,
           this.payload[key].inputCase
         );
+
         console.log("Evaluation Response:-", response);
+
+        resultQueueProducer({ id: key, ...response });
       }
     }
   };
 
   failed = (job?: Job): void => {
     console.log("Submission Job Failed:-");
+
     if (job) {
       console.log(job.id);
     }
