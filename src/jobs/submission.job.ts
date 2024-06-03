@@ -10,9 +10,9 @@ import { SubmissionPayload } from "../types/submissionPayload";
 
 export default class SubmissionJob implements IJob {
   name: string;
-  payload: Record<string, SubmissionPayload>;
+  payload: SubmissionPayload;
 
-  constructor(payload: Record<string, SubmissionPayload>) {
+  constructor(payload: SubmissionPayload) {
     this.payload = payload;
     this.name = this.constructor.name;
   }
@@ -21,46 +21,44 @@ export default class SubmissionJob implements IJob {
     console.log("Handler of The Submission Job Called");
 
     if (job) {
-      const key = Object.keys(this.payload)[0];
+      console.log(this.payload.language);
 
-      console.log(this.payload[key].language);
-
-      if (this.payload[key].language === "CPP") {
+      if (this.payload.language === "CPP") {
         const response = await runCpp(
-          this.payload[key].code,
-          this.payload[key].inputCase
+          this.payload.code,
+          this.payload.inputCase
         );
 
         console.log("Evaluation Response:-", response);
 
-        resultQueueProducer({ id: key, ...response });
-      } else if (this.payload[key].language === "JAVA") {
+        resultQueueProducer({ id: this.payload.id, ...response });
+      } else if (this.payload.language === "JAVA") {
         const response = await runJava(
-          this.payload[key].code,
-          this.payload[key].inputCase
+          this.payload.code,
+          this.payload.inputCase
         );
 
         console.log("Evaluation Response:-", response);
 
-        resultQueueProducer({ id: key, ...response });
-      } else if (this.payload[key].language === "PYTHON") {
+        resultQueueProducer({ id: this.payload.id, ...response });
+      } else if (this.payload.language === "PYTHON") {
         const response = await runPython(
-          this.payload[key].code,
-          this.payload[key].inputCase
+          this.payload.code,
+          this.payload.inputCase
         );
 
         console.log("Evaluation Response:-", response);
 
-        resultQueueProducer({ id: key, ...response });
-      } else if (this.payload[key].language === "NODEJS") {
+        resultQueueProducer({ id: this.payload.id, ...response });
+      } else if (this.payload.language === "NODEJS") {
         const response = await runNodeJS(
-          this.payload[key].code,
-          this.payload[key].inputCase
+          this.payload.code,
+          this.payload.inputCase
         );
 
         console.log("Evaluation Response:-", response);
 
-        resultQueueProducer({ id: key, ...response });
+        resultQueueProducer({ id: this.payload.id, ...response });
       }
     }
   };
