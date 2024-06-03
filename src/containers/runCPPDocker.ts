@@ -1,10 +1,14 @@
+import { DockerStreamOutput } from "../types/dockerStreamOutput";
 import { CPP_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import decodeDockerStream from "./dockerHelper";
 import isImagePresent from "./isImagePresent";
 import pullImage from "./pullImage";
 
-async function runCpp(code: string, inputTestCase: string) {
+async function runCpp(
+  code: string,
+  inputTestCase: string
+): Promise<DockerStreamOutput> {
   const rawLogBuffer: Buffer[] = [];
 
   console.log("Initialising A New C++ Docker Container");
@@ -44,7 +48,7 @@ async function runCpp(code: string, inputTestCase: string) {
     rawLogBuffer.push(chunk);
   });
 
-  const response = await new Promise((res) => {
+  const response: DockerStreamOutput = await new Promise((res) => {
     loggerStream.on("end", () => {
       console.log(rawLogBuffer);
 

@@ -5,6 +5,7 @@ import serverConfig from "./config/server.config";
 import sampleQueueProducer from "./producers/sample.producer";
 import submissionQueueProducer from "./producers/submission.producer";
 import apiRouter from "./routes";
+import resultWorker from "./workers/result.worker";
 import sampleWorker from "./workers/sample.worker";
 import submissionWorker from "./workers/submission.worker";
 
@@ -26,6 +27,7 @@ app.listen(serverConfig.PORT, () => {
 
   sampleWorker("SampleQueue");
   submissionWorker("SubmissionQueue");
+  resultWorker("ResultQueue");
 
   submissionQueueProducer({
     "1234": {

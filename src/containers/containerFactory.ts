@@ -1,6 +1,9 @@
 import Docker from "dockerode";
 
-async function createContainer(imageName: string, cmdExecutable: string[]) {
+async function createContainer(
+  imageName: string,
+  cmdExecutable: string[]
+): Promise<Docker.Container> {
   const docker = new Docker();
 
   const container = await docker.createContainer({
