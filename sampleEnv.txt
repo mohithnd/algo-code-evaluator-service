@@ -1,3 +1,0 @@
-PORT=<port number on which you want to run the server>
-REDIS_PORT=<port number on which redis server in running>
-REDIS_HOST="<host address on which redis server is running>"
