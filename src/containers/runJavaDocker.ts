@@ -7,7 +7,7 @@ import pullImage from "./pullImage";
 
 async function runJava(
   code: string,
-  inputTestCase: string
+  inputTestCases: string[]
 ): Promise<DockerStreamOutput> {
   const rawLogBuffer: Buffer[] = [];
 
@@ -16,10 +16,9 @@ async function runJava(
   const runCommand = `echo '${code.replace(
     /'/g,
     `'\\"`
-  )}' > test.java && echo '${inputTestCase.replace(
-    /'/g,
-    `'\\"`
-  )}' | java test.java`;
+  )}' > test.java && echo '${inputTestCases
+    .join("")
+    .replace(/'/g, `'\\"`)}' | java test.java`;
 
   console.log(runCommand);
 

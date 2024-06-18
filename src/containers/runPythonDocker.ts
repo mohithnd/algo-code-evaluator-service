@@ -7,7 +7,7 @@ import pullImage from "./pullImage";
 
 async function runPython(
   code: string,
-  inputTestCase: string
+  inputTestCases: string[]
 ): Promise<DockerStreamOutput> {
   const rawLogBuffer: Buffer[] = [];
 
@@ -16,10 +16,9 @@ async function runPython(
   const runCommand = `echo '${code.replace(
     /'/g,
     `'\\"`
-  )}' > test.py && echo '${inputTestCase.replace(
-    /'/g,
-    `'\\"`
-  )}' | python3 test.py`;
+  )}' > test.py && echo '${inputTestCases
+    .join("")
+    .replace(/'/g, `'\\"`)}' | python3 test.py`;
 
   console.log(runCommand);
 

@@ -13,7 +13,7 @@ export function addSubmission(req: Request, res: Response) {
     id: submissionId,
     language: submissionDto.language,
     code: submissionDto.code,
-    inputCase: submissionDto.testCase,
+    inputCases: submissionDto.testCases,
   });
 
   return res.status(201).json({

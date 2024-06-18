@@ -26,7 +26,7 @@ export default class SubmissionJob implements IJob {
       if (this.payload.language === "CPP") {
         const response = await runCpp(
           this.payload.code,
-          this.payload.inputCase
+          this.payload.inputCases
         );
 
         console.log("Evaluation Response:-", response);
@@ -35,7 +35,7 @@ export default class SubmissionJob implements IJob {
       } else if (this.payload.language === "JAVA") {
         const response = await runJava(
           this.payload.code,
-          this.payload.inputCase
+          this.payload.inputCases
         );
 
         console.log("Evaluation Response:-", response);
@@ -44,7 +44,7 @@ export default class SubmissionJob implements IJob {
       } else if (this.payload.language === "PYTHON") {
         const response = await runPython(
           this.payload.code,
-          this.payload.inputCase
+          this.payload.inputCases
         );
 
         console.log("Evaluation Response:-", response);
@@ -53,7 +53,7 @@ export default class SubmissionJob implements IJob {
       } else if (this.payload.language === "NODEJS") {
         const response = await runNodeJS(
           this.payload.code,
-          this.payload.inputCase
+          this.payload.inputCases
         );
 
         console.log("Evaluation Response:-", response);

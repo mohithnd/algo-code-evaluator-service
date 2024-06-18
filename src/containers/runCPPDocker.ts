@@ -7,7 +7,7 @@ import pullImage from "./pullImage";
 
 async function runCpp(
   code: string,
-  inputTestCase: string
+  inputTestCases: string[]
 ): Promise<DockerStreamOutput> {
   const rawLogBuffer: Buffer[] = [];
 
@@ -16,10 +16,9 @@ async function runCpp(
   const runCommand = `echo '${code.replace(
     /'/g,
     `'\\"`
-  )}' > test.cpp && g++ test.cpp -o test && echo '${inputTestCase.replace(
-    /'/g,
-    `'\\"`
-  )}' | stdbuf -oL -eL ./test`;
+  )}' > test.cpp && g++ test.cpp -o test && echo '${inputTestCases
+    .join(" ")
+    .replace(/'/g, `'\\"`)}' | stdbuf -oL -eL ./test`;
 
   console.log(runCommand);
 
