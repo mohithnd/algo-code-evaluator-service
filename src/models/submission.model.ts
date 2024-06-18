@@ -22,6 +22,12 @@ const submissionSchema = new mongoose.Schema({
     enum: ["Pending", "Success", "RE", "TLE", "MLE", "WA"],
     default: "Pending",
   },
+  stdout: {
+    type: String,
+  },
+  stderr: {
+    type: String,
+  },
 });
 
 export default mongoose.model("Submission", submissionSchema);

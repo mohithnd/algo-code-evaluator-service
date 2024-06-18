@@ -29,6 +29,8 @@ export default class ResultJob implements IJob {
           submission.status = "Success";
         }
 
+        submission.stdout = this.payload.stdout;
+        submission.stderr = this.payload.stderr;
         await submission.save();
 
         console.log(submission);
