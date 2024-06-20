@@ -1,12 +1,8 @@
 import { Job } from "bullmq";
 
-import runCpp from "../containers/runCPPDocker";
-import runJava from "../containers/runJavaDocker";
-import runNodeJS from "../containers/runNodeJSDocker";
-import runPython from "../containers/runPythonDocker";
-import resultQueueProducer from "../producers/result.producer";
 import { IJob } from "../types/bullmq.jobDefinition";
 import { SubmissionPayload } from "../types/submissionPayload";
+import createExecutor from "../utils/executorFactory";
 
 export default class SubmissionJob implements IJob {
   name: string;
@@ -23,42 +19,20 @@ export default class SubmissionJob implements IJob {
     if (job) {
       console.log(this.payload.language);
 
-      if (this.payload.language === "CPP") {
-        const response = await runCpp(
+      const strategy = createExecutor(this.payload.language);
+
+      if (strategy) {
+        const response = await strategy.execute(
           this.payload.code,
           this.payload.inputCases
         );
 
-        console.log("Evaluation Response:-", response);
-
-        resultQueueProducer({ id: this.payload.id, ...response });
-      } else if (this.payload.language === "JAVA") {
-        const response = await runJava(
-          this.payload.code,
-          this.payload.inputCases
-        );
-
-        console.log("Evaluation Response:-", response);
-
-        resultQueueProducer({ id: this.payload.id, ...response });
-      } else if (this.payload.language === "PYTHON") {
-        const response = await runPython(
-          this.payload.code,
-          this.payload.inputCases
-        );
-
-        console.log("Evaluation Response:-", response);
-
-        resultQueueProducer({ id: this.payload.id, ...response });
-      } else if (this.payload.language === "NODEJS") {
-        const response = await runNodeJS(
-          this.payload.code,
-          this.payload.inputCases
-        );
-
-        console.log("Evaluation Response:-", response);
-
-        resultQueueProducer({ id: this.payload.id, ...response });
+        if (response.status === "COMPLETED") {
+          console.log("Code Executed Successfully");
+        } else {
+          console.log("Something Went Wrong With Code Execution");
+        }
+        console.log(response);
       }
     }
   };
