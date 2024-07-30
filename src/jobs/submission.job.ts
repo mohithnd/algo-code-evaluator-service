@@ -1,5 +1,6 @@
 import { Job } from "bullmq";
 
+import resultProducer from "../producers/result.producer";
 import { IJob } from "../types/bullmq.jobDefinition";
 import { SubmissionPayload } from "../types/submissionPayload";
 import createExecutor from "../utils/executorFactory";
@@ -29,8 +30,18 @@ export default class SubmissionJob implements IJob {
 
         if (response.status === "COMPLETED") {
           console.log("Code Executed Successfully");
+          await resultProducer({
+            id: this.payload.id,
+            stdout: response.output,
+            stderr: "",
+          });
         } else {
           console.log("Something Went Wrong With Code Execution");
+          await resultProducer({
+            id: this.payload.id,
+            stdout: "",
+            stderr: response.output,
+          });
         }
         console.log(response);
       }
