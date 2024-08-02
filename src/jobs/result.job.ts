@@ -17,10 +17,7 @@ export default class ResultJob implements IJob {
     console.log("Handler of The Result Job Called");
 
     if (job) {
-      console.log(this.payload);
-
       const submission = await Submission.findById(this.payload.id);
-      console.log(submission);
 
       if (submission) {
         if (this.payload.stderr.length > 0) {

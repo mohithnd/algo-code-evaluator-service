@@ -3,14 +3,7 @@ export default function codeCreator(
   midCode: string,
   endCode: string
 ): string {
-  return `
-  ${startCode}
+  return `${startCode}
   ${midCode}
-  ${endCode}
-  `;
+  ${endCode}`;
 }
-
-/**
- * For python endCode can be passed as empty string
- * For java endCode can be passed as empty string
- */

@@ -18,8 +18,6 @@ export default class SubmissionJob implements IJob {
     console.log("Handler of The Submission Job Called");
 
     if (job) {
-      console.log(this.payload.language);
-
       const strategy = createExecutor(this.payload.language);
 
       if (strategy) {

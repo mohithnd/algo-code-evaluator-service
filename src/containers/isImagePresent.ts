@@ -7,8 +7,6 @@ export default async function isImagePresent(
 
   const allImages = await docker.listImages();
 
-  console.log(allImages);
-
   for (const imageInfo of allImages) {
     const imageTags = imageInfo.RepoTags as string[];
     for (const image of imageTags) {
