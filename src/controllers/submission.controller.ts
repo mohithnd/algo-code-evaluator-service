@@ -11,6 +11,7 @@ export function addSubmission(req: Request, res: Response) {
 
   submissionQueueProducer({
     id: submissionId,
+    problemId: submissionDto.problemId,
     language: submissionDto.language,
     code: submissionDto.code,
     inputCases: submissionDto.testCases,
