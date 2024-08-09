@@ -3,9 +3,7 @@ import { Job } from "bullmq";
 import resultProducer from "../producers/result.producer";
 import { IJob } from "../types/bullmq.jobDefinition";
 import { SubmissionPayload } from "../types/submissionPayload";
-import codeCreator from "../utils/codeCreator";
 import createExecutor from "../utils/executorFactory";
-import fetchCodeStubs from "../utils/fetchCodeStubs";
 
 export default class SubmissionJob implements IJob {
   name: string;
@@ -21,11 +19,10 @@ export default class SubmissionJob implements IJob {
 
     if (job) {
       const strategy = createExecutor(this.payload.language);
-      const problem = await fetchCodeStubs(this.payload.problemId, this.name);
 
-      if (strategy && problem) {
+      if (strategy) {
         const response = await strategy.execute(
-          codeCreator(problem.start, this.payload.code, problem.end),
+          this.payload.code,
           this.payload.inputCases
         );
 
