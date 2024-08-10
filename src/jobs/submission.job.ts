@@ -20,10 +20,18 @@ export default class SubmissionJob implements IJob {
     if (job) {
       const strategy = createExecutor(this.payload.language);
 
+      const inputCases = this.payload.testCases.map((ele) => {
+        return ele.input;
+      });
+      const outputCases = this.payload.testCases.map((ele) => {
+        return ele.output;
+      });
+
       if (strategy) {
         const response = await strategy.execute(
           this.payload.code,
-          this.payload.inputCases
+          inputCases,
+          outputCases
         );
 
         if (response.status === "COMPLETED") {

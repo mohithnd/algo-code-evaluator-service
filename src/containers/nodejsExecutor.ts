@@ -10,9 +10,12 @@ import pullImage from "./pullImage";
 class NodeJSExecutor implements CodeExecutorStrategy {
   async execute(
     code: string,
-    inputTestCases: string[]
+    inputTestCases: string[],
+    outputTestCases: string[]
   ): Promise<ExecutionResponse> {
     const rawLogBuffer: Buffer[] = [];
+
+    console.log(outputTestCases);
 
     console.log("Initialising A New Node.js Docker Container");
 

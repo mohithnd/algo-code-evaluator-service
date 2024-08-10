@@ -14,7 +14,7 @@ export function addSubmission(req: Request, res: Response) {
     problemId: submissionDto.problemId,
     language: submissionDto.language,
     code: submissionDto.code,
-    inputCases: submissionDto.testCases,
+    testCases: submissionDto.testCases,
   });
 
   return res.status(201).json({

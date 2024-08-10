@@ -15,6 +15,11 @@ export const createSubmissionZodSchema = z
     problemId: z.string(),
     code: z.string(),
     language: z.string(),
-    testCases: z.array(z.string()),
+    testCases: z.array(
+      z.object({
+        input: z.string(),
+        output: z.string(),
+      })
+    ),
   })
   .strict();
