@@ -3,7 +3,6 @@ import express, { Express } from "express";
 import bullBoardAdapter from "./config/bullBoard.config";
 import connectToDB from "./config/db.config";
 import serverConfig from "./config/server.config";
-import apiRouter from "./routes";
 import resultWorker from "./workers/result.worker";
 import submissionWorker from "./workers/submission.worker";
 
@@ -12,8 +11,6 @@ const app: Express = express();
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
-
-app.use("/api", apiRouter);
 
 app.use("/queues", bullBoardAdapter.getRouter());
 
