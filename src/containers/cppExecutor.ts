@@ -1,7 +1,7 @@
+import serverConfig from "../config/server.config";
 import CodeExecutorStrategy, {
   ExecutionResponse,
 } from "../types/codeExecutorStrategy";
-import { CPP_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import { fetchDecodedStream } from "./dockerHelper";
 import isImagePresent from "./isImagePresent";
@@ -22,17 +22,17 @@ class CPPExecutor implements CodeExecutorStrategy {
     const runCommand = `echo '${code.replace(
       /'/g,
       `'\\"`
-    )}' > test.cpp && g++ test.cpp -o test && echo '${inputTestCases
+    )}' > Solution.cpp && g++ Solution.cpp -o Solution && echo '${inputTestCases
       .join(" ")
-      .replace(/'/g, `'\\"`)}' | stdbuf -oL -eL ./test`;
+      .replace(/'/g, `'\\"`)}' | stdbuf -oL -eL ./Solution`;
 
     console.log(runCommand);
 
-    if (!(await isImagePresent(CPP_IMAGE))) {
-      await pullImage(CPP_IMAGE);
+    if (!(await isImagePresent(serverConfig.CPP_IMAGE))) {
+      await pullImage(serverConfig.CPP_IMAGE);
     }
 
-    const cppDockerContainer = await createContainer(CPP_IMAGE, [
+    const cppDockerContainer = await createContainer(serverConfig.CPP_IMAGE, [
       "/bin/sh",
       "-c",
       runCommand,

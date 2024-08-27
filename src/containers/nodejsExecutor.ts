@@ -1,7 +1,7 @@
+import serverConfig from "../config/server.config";
 import CodeExecutorStrategy, {
   ExecutionResponse,
 } from "../types/codeExecutorStrategy";
-import { NODEJS_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import { fetchDecodedStream } from "./dockerHelper";
 import isImagePresent from "./isImagePresent";
@@ -22,21 +22,20 @@ class NodeJSExecutor implements CodeExecutorStrategy {
     const runCommand = `echo '${code.replace(
       /'/g,
       `'\\"`
-    )}' > test.js && echo '${inputTestCases
+    )}' > Solution.js && echo '${inputTestCases
       .join("")
-      .replace(/'/g, `'\\"`)}' | node test.js`;
+      .replace(/'/g, `'\\"`)}' | node Solution.js`;
 
     console.log(runCommand);
 
-    if (!(await isImagePresent(NODEJS_IMAGE))) {
-      await pullImage(NODEJS_IMAGE);
+    if (!(await isImagePresent(serverConfig.NODEJS_IMAGE))) {
+      await pullImage(serverConfig.NODEJS_IMAGE);
     }
 
-    const nodejsDockerContainer = await createContainer(NODEJS_IMAGE, [
-      "/bin/sh",
-      "-c",
-      runCommand,
-    ]);
+    const nodejsDockerContainer = await createContainer(
+      serverConfig.NODEJS_IMAGE,
+      ["/bin/sh", "-c", runCommand]
+    );
 
     await nodejsDockerContainer.start();
 

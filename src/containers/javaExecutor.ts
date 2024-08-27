@@ -1,7 +1,7 @@
+import serverConfig from "../config/server.config";
 import CodeExecutorStrategy, {
   ExecutionResponse,
 } from "../types/codeExecutorStrategy";
-import { JAVA_IMAGE } from "../utils/constants";
 import createContainer from "./containerFactory";
 import { fetchDecodedStream } from "./dockerHelper";
 import isImagePresent from "./isImagePresent";
@@ -22,17 +22,17 @@ class JavaExecutor implements CodeExecutorStrategy {
     const runCommand = `echo '${code.replace(
       /'/g,
       `'\\"`
-    )}' > test.java && echo '${inputTestCases
+    )}' > Main.java && echo '${inputTestCases
       .join("")
-      .replace(/'/g, `'\\"`)}' | java test.java`;
+      .replace(/'/g, `'\\"`)}' | java Main.java`;
 
     console.log(runCommand);
 
-    if (!(await isImagePresent(JAVA_IMAGE))) {
-      await pullImage(JAVA_IMAGE);
+    if (!(await isImagePresent(serverConfig.JAVA_IMAGE))) {
+      await pullImage(serverConfig.JAVA_IMAGE);
     }
 
-    const javaDockerContainer = await createContainer(JAVA_IMAGE, [
+    const javaDockerContainer = await createContainer(serverConfig.JAVA_IMAGE, [
       "/bin/sh",
       "-c",
       runCommand,
