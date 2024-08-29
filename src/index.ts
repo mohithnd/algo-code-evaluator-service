@@ -3,7 +3,6 @@ import express, { Express } from "express";
 import bullBoardAdapter from "./config/bullBoard.config";
 import connectToDB from "./config/db.config";
 import serverConfig from "./config/server.config";
-import resultWorker from "./workers/result.worker";
 import submissionWorker from "./workers/submission.worker";
 
 const app: Express = express();
@@ -23,5 +22,4 @@ app.listen(serverConfig.PORT, () => {
   );
 
   submissionWorker("SubmissionQueue");
-  resultWorker("ResultQueue");
 });
