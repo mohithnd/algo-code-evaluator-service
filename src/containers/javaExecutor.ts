@@ -63,7 +63,9 @@ class JavaExecutor implements CodeExecutorStrategy {
     } catch (err) {
       return { output: err as string, status: "ERROR" };
     } finally {
-      await javaDockerContainer.remove();
+      await javaDockerContainer.remove({
+        force:true 
+      });
     }
   }
 }

@@ -62,7 +62,9 @@ class NodeJSExecutor implements CodeExecutorStrategy {
     } catch (err) {
       return { output: err as string, status: "ERROR" };
     } finally {
-      await nodejsDockerContainer.remove();
+      await nodejsDockerContainer.remove({
+        force: true,
+      });
     }
   }
 }

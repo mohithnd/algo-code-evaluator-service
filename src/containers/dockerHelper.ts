@@ -35,7 +35,13 @@ export async function fetchDecodedStream(
   rawLogBuffer: Buffer[]
 ): Promise<string> {
   return new Promise((res, rej) => {
+    const timeout = setTimeout(() => {
+      console.log("Timeout Called");
+      rej("TIME LIMIT EXCEEDED");
+    }, 2000);
+
     loggerStream.on("end", () => {
+      clearTimeout(timeout);
       const completeBuffer = Buffer.concat(rawLogBuffer);
       const decodedStream = decodeDockerStream(completeBuffer);
 

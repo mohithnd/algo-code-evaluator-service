@@ -14,6 +14,9 @@ async function createContainer(
     AttachStderr: true,
     Tty: false,
     OpenStdin: true,
+    HostConfig: {
+      Memory: 512 * 1024 * 1024,
+    },
   });
 
   return container;
