@@ -17,13 +17,15 @@ class NodeJSExecutor implements CodeExecutorStrategy {
 
     console.log(outputTestCases);
 
+    inputTestCases.unshift(`${inputTestCases.length}`);
+
     console.log("Initialising A New Node.js Docker Container");
 
     const runCommand = `echo '${code.replace(
       /'/g,
       `'\\"`
     )}' > Solution.js && echo '${inputTestCases
-      .join("")
+      .join(" ")
       .replace(/'/g, `'\\"`)}' | node Solution.js`;
 
     console.log(runCommand);

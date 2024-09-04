@@ -17,13 +17,15 @@ class PythonExecutor implements CodeExecutorStrategy {
 
     console.log(outputTestCases);
 
+    inputTestCases.unshift(`${inputTestCases.length}`);
+
     console.log("Initialising A New Python Docker Container");
 
     const runCommand = `echo '${code.replace(
       /'/g,
       `'\\"`
     )}' > Solution.py && echo '${inputTestCases
-      .join("")
+      .join(" ")
       .replace(/'/g, `'\\"`)}' | python3 Solution.py`;
 
     console.log(runCommand);

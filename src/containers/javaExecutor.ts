@@ -17,14 +17,16 @@ class JavaExecutor implements CodeExecutorStrategy {
 
     console.log(outputTestCases);
 
+    inputTestCases.unshift(`${inputTestCases.length}`);
+
     console.log("Initialising A New Java Docker Container");
 
     const runCommand = `echo '${code.replace(
       /'/g,
       `'\\"`
-    )}' > Main.java && echo '${inputTestCases
-      .join("")
-      .replace(/'/g, `'\\"`)}' | java Main.java`;
+    )}' > Solution.java && echo '${inputTestCases
+      .join(" ")
+      .replace(/'/g, `'\\"`)}' | java Solution.java`;
 
     console.log(runCommand);
 
@@ -64,7 +66,7 @@ class JavaExecutor implements CodeExecutorStrategy {
       return { output: err as string, status: "ERROR" };
     } finally {
       await javaDockerContainer.remove({
-        force:true 
+        force: true,
       });
     }
   }

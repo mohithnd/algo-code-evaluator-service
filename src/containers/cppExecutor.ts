@@ -17,6 +17,8 @@ class CPPExecutor implements CodeExecutorStrategy {
 
     console.log(outputTestCases);
 
+    inputTestCases.unshift(`${inputTestCases.length}`);
+
     console.log("Initialising A New C++ Docker Container");
 
     const runCommand = `echo '${code.replace(
