@@ -24,9 +24,9 @@ class CPPExecutor implements CodeExecutorStrategy {
     const runCommand = `echo '${code.replace(
       /'/g,
       `'\\"`
-    )}' > Solution.cpp && g++ Solution.cpp -o Solution && echo '${inputTestCases
+    )}' > main.cpp && g++ main.cpp -o main && echo '${inputTestCases
       .join(" ")
-      .replace(/'/g, `'\\"`)}' | stdbuf -oL -eL ./Solution`;
+      .replace(/'/g, `'\\"`)}' | ./main`;
 
     console.log(runCommand);
 

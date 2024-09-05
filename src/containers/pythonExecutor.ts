@@ -24,9 +24,9 @@ class PythonExecutor implements CodeExecutorStrategy {
     const runCommand = `echo '${code.replace(
       /'/g,
       `'\\"`
-    )}' > Solution.py && echo '${inputTestCases
+    )}' > main.py && echo '${inputTestCases
       .join(" ")
-      .replace(/'/g, `'\\"`)}' | python3 Solution.py`;
+      .replace(/'/g, `'\\"`)}' | python3 main.py`;
 
     console.log(runCommand);
 

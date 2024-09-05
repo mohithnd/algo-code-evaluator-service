@@ -24,9 +24,9 @@ class JavaExecutor implements CodeExecutorStrategy {
     const runCommand = `echo '${code.replace(
       /'/g,
       `'\\"`
-    )}' > Solution.java && echo '${inputTestCases
+    )}' > Main.java && javac Main.java && echo '${inputTestCases
       .join(" ")
-      .replace(/'/g, `'\\"`)}' | java Solution.java`;
+      .replace(/'/g, `'\\"`)}' | java Main`;
 
     console.log(runCommand);
 

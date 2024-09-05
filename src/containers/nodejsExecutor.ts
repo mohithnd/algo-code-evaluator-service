@@ -24,9 +24,9 @@ class NodeJSExecutor implements CodeExecutorStrategy {
     const runCommand = `echo '${code.replace(
       /'/g,
       `'\\"`
-    )}' > Solution.js && echo '${inputTestCases
+    )}' > main.js && echo '${inputTestCases
       .join(" ")
-      .replace(/'/g, `'\\"`)}' | node Solution.js`;
+      .replace(/'/g, `'\\"`)}' | node main.js`;
 
     console.log(runCommand);
 
