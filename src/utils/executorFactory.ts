@@ -1,7 +1,7 @@
-import CPPExecutor from "../containers/cppExecutor";
-import JavaExecutor from "../containers/javaExecutor";
-import NodeJSExecutor from "../containers/nodejsExecutor";
-import PythonExecutor from "../containers/pythonExecutor";
+import CPPExecutor from "../executors/cppExecutor";
+import JavaExecutor from "../executors/javaExecutor";
+import NodeJSExecutor from "../executors/nodejsExecutor";
+import PythonExecutor from "../executors/pythonExecutor";
 import CodeExecutorStrategy from "../types/codeExecutorStrategy";
 
 export default function createExecutor(

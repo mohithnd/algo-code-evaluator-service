@@ -1,11 +1,11 @@
 import serverConfig from "../config/server.config";
+import createContainer from "../containers/containerFactory";
+import { fetchDecodedStream } from "../containers/dockerHelper";
+import isImagePresent from "../containers/isImagePresent";
+import pullImage from "../containers/pullImage";
 import CodeExecutorStrategy, {
   ExecutionResponse,
 } from "../types/codeExecutorStrategy";
-import createContainer from "./containerFactory";
-import { fetchDecodedStream } from "./dockerHelper";
-import isImagePresent from "./isImagePresent";
-import pullImage from "./pullImage";
 
 class NodeJSExecutor implements CodeExecutorStrategy {
   async execute(
@@ -21,12 +21,9 @@ class NodeJSExecutor implements CodeExecutorStrategy {
 
     console.log("Initialising A New Node.js Docker Container");
 
-    const runCommand = `echo '${code.replace(
-      /'/g,
-      `'\\"`
-    )}' > main.js && echo '${inputTestCases
-      .join(" ")
-      .replace(/'/g, `'\\"`)}' | node main.js`;
+    const escapedCode = code.replace(/'/g, `'\\"'`);
+    const escapedInputs = inputTestCases.join(" ").replace(/'/g, `'\\"'`);
+    const runCommand = `echo '${escapedCode}' > main.js && echo '${escapedInputs}' | node main.js`;
 
     console.log(runCommand);
 

@@ -4,7 +4,7 @@ import redisConnection from "../config/redis.config";
 import SubmissionJob from "../jobs/submission.job";
 
 export default function submissionWorker(queueName: string) {
-  new Worker(
+  return new Worker(
     queueName,
     async (job: Job) => {
       if (job.name === "SubmissionJob") {

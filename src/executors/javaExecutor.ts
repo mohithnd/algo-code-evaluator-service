@@ -1,11 +1,11 @@
 import serverConfig from "../config/server.config";
+import createContainer from "../containers/containerFactory";
+import { fetchDecodedStream } from "../containers/dockerHelper";
+import isImagePresent from "../containers/isImagePresent";
+import pullImage from "../containers/pullImage";
 import CodeExecutorStrategy, {
   ExecutionResponse,
 } from "../types/codeExecutorStrategy";
-import createContainer from "./containerFactory";
-import { fetchDecodedStream } from "./dockerHelper";
-import isImagePresent from "./isImagePresent";
-import pullImage from "./pullImage";
 
 class JavaExecutor implements CodeExecutorStrategy {
   async execute(
@@ -21,12 +21,9 @@ class JavaExecutor implements CodeExecutorStrategy {
 
     console.log("Initialising A New Java Docker Container");
 
-    const runCommand = `echo '${code.replace(
-      /'/g,
-      `'\\"`
-    )}' > Main.java && javac Main.java && echo '${inputTestCases
-      .join(" ")
-      .replace(/'/g, `'\\"`)}' | java Main`;
+    const escapedCode = code.replace(/'/g, `'\\"'`);
+    const escapedInput = inputTestCases.join(" ").replace(/'/g, `'\\"'`);
+    const runCommand = `echo '${escapedCode}' > Main.java && javac Main.java && echo '${escapedInput}' | java Main`;
 
     console.log(runCommand);
 
