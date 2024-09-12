@@ -14,20 +14,20 @@ class NodeJSExecutor implements CodeExecutorStrategy {
     outputTestCases: string[]
   ): Promise<ExecutionResponse> {
     const rawLogBuffer: Buffer[] = [];
-
-    console.log(outputTestCases);
+    console.log("Executing NodeJS code...");
 
     inputTestCases.unshift(`${inputTestCases.length}`);
-
-    console.log("Initialising A New Node.js Docker Container");
+    console.log("Input test cases:", inputTestCases);
+    console.log("Output test cases:", outputTestCases);
 
     const escapedCode = code.replace(/'/g, `'\\"'`);
     const escapedInputs = inputTestCases.join(" ").replace(/'/g, `'\\"'`);
     const runCommand = `echo '${escapedCode}' > main.js && echo '${escapedInputs}' | node main.js`;
 
-    console.log(runCommand);
+    console.log("Run command:", runCommand);
 
     if (!(await isImagePresent(serverConfig.NODEJS_IMAGE))) {
+      console.log("NodeJS image not found, pulling image...");
       await pullImage(serverConfig.NODEJS_IMAGE);
     }
 
@@ -37,8 +37,7 @@ class NodeJSExecutor implements CodeExecutorStrategy {
     );
 
     await nodejsDockerContainer.start();
-
-    console.log("Started The NodeJS Docker Container");
+    console.log("Started NodeJS Docker Container");
 
     const loggerStream = await nodejsDockerContainer.logs({
       stdout: true,
@@ -56,14 +55,14 @@ class NodeJSExecutor implements CodeExecutorStrategy {
         loggerStream,
         rawLogBuffer
       );
-
+      console.log("Execution response:", response);
       return { output: response, status: "COMPLETED" };
     } catch (err) {
+      console.error("Execution error:", err);
       return { output: err as string, status: "ERROR" };
     } finally {
-      await nodejsDockerContainer.remove({
-        force: true,
-      });
+      await nodejsDockerContainer.remove({ force: true });
+      console.log("NodeJS Docker Container removed");
     }
   }
 }

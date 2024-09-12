@@ -14,20 +14,20 @@ class PythonExecutor implements CodeExecutorStrategy {
     outputTestCases: string[]
   ): Promise<ExecutionResponse> {
     const rawLogBuffer: Buffer[] = [];
-
-    console.log(outputTestCases);
+    console.log("Executing Python code...");
 
     inputTestCases.unshift(`${inputTestCases.length}`);
-
-    console.log("Initialising A New Python Docker Container");
+    console.log("Input test cases:", inputTestCases);
+    console.log("Output test cases:", outputTestCases);
 
     const escapedCode = code.replace(/'/g, `'\\"'`);
     const escapedInputs = inputTestCases.join(" ").replace(/'/g, `'\\"'`);
     const runCommand = `echo '${escapedCode}' > main.py && echo '${escapedInputs}' | python3 main.py`;
 
-    console.log(runCommand);
+    console.log("Run command:", runCommand);
 
     if (!(await isImagePresent(serverConfig.PYTHON_IMAGE))) {
+      console.log("Python image not found, pulling image...");
       await pullImage(serverConfig.PYTHON_IMAGE);
     }
 
@@ -37,8 +37,7 @@ class PythonExecutor implements CodeExecutorStrategy {
     );
 
     await pythonDockerContainer.start();
-
-    console.log("Started The Python Docker Container");
+    console.log("Started Python Docker Container");
 
     const loggerStream = await pythonDockerContainer.logs({
       stdout: true,
@@ -56,14 +55,14 @@ class PythonExecutor implements CodeExecutorStrategy {
         loggerStream,
         rawLogBuffer
       );
-
+      console.log("Execution response:", response);
       return { output: response, status: "COMPLETED" };
     } catch (err) {
+      console.error("Execution error:", err);
       return { output: err as string, status: "ERROR" };
     } finally {
-      await pythonDockerContainer.remove({
-        force: true,
-      });
+      await pythonDockerContainer.remove({ force: true });
+      console.log("Python Docker Container removed");
     }
   }
 }

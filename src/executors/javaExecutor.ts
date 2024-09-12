@@ -14,20 +14,20 @@ class JavaExecutor implements CodeExecutorStrategy {
     outputTestCases: string[]
   ): Promise<ExecutionResponse> {
     const rawLogBuffer: Buffer[] = [];
-
-    console.log(outputTestCases);
+    console.log("Executing Java code...");
 
     inputTestCases.unshift(`${inputTestCases.length}`);
-
-    console.log("Initialising A New Java Docker Container");
+    console.log("Input test cases:", inputTestCases);
+    console.log("Output test cases:", outputTestCases);
 
     const escapedCode = code.replace(/'/g, `'\\"'`);
     const escapedInput = inputTestCases.join(" ").replace(/'/g, `'\\"'`);
     const runCommand = `echo '${escapedCode}' > Main.java && javac Main.java && echo '${escapedInput}' | java Main`;
 
-    console.log(runCommand);
+    console.log("Run command:", runCommand);
 
     if (!(await isImagePresent(serverConfig.JAVA_IMAGE))) {
+      console.log("Java image not found, pulling image...");
       await pullImage(serverConfig.JAVA_IMAGE);
     }
 
@@ -38,8 +38,7 @@ class JavaExecutor implements CodeExecutorStrategy {
     ]);
 
     await javaDockerContainer.start();
-
-    console.log("Started The Java Docker Container");
+    console.log("Started Java Docker Container");
 
     const loggerStream = await javaDockerContainer.logs({
       stdout: true,
@@ -57,14 +56,14 @@ class JavaExecutor implements CodeExecutorStrategy {
         loggerStream,
         rawLogBuffer
       );
-
+      console.log("Execution response:", response);
       return { output: response, status: "COMPLETED" };
     } catch (err) {
+      console.error("Execution error:", err);
       return { output: err as string, status: "ERROR" };
     } finally {
-      await javaDockerContainer.remove({
-        force: true,
-      });
+      await javaDockerContainer.remove({ force: true });
+      console.log("Java Docker Container removed");
     }
   }
 }

@@ -15,11 +15,9 @@ app.use("/queues", bullBoardAdapter.getRouter());
 
 app.listen(serverConfig.PORT, () => {
   connectToDB();
-
   console.log(`Server Is Running On Port: ${serverConfig.PORT}`);
   console.log(
     `BullBoard Dashboard Is Running On: http://localhost:${serverConfig.PORT}/queues`
   );
-
   submissionWorker("SubmissionQueue");
 });

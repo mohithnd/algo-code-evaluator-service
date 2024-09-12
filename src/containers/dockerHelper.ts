@@ -9,24 +9,23 @@ export default function decodeDockerStream(buffer: Buffer): DockerStreamOutput {
     stderr: "",
   };
 
+  console.log("Decoding Docker stream...");
+
   while (offset < buffer.length) {
     const channel = buffer[offset];
-
     const length = buffer.readUint32BE(offset + 4);
-
     offset += DOCKER_STREAM_HEADER_SIZE;
 
     if (channel === 1) {
-      // stdout stream
       output.stdout += buffer.toString("utf-8", offset, offset + length);
     } else if (channel === 2) {
-      // stderr stream
       output.stderr += buffer.toString("utf-8", offset, offset + length);
     }
 
     offset += length;
   }
 
+  console.log("Decoded Docker stream:", output);
   return output;
 }
 
@@ -44,8 +43,6 @@ export async function fetchDecodedStream(
       clearTimeout(timeout);
       const completeBuffer = Buffer.concat(rawLogBuffer);
       const decodedStream = decodeDockerStream(completeBuffer);
-
-      console.log(decodedStream);
 
       if (decodedStream.stderr) {
         rej(decodedStream.stderr);

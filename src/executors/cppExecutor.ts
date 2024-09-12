@@ -14,20 +14,20 @@ class CPPExecutor implements CodeExecutorStrategy {
     outputTestCases: string[]
   ): Promise<ExecutionResponse> {
     const rawLogBuffer: Buffer[] = [];
-
-    console.log(outputTestCases);
+    console.log("Executing C++ code...");
 
     inputTestCases.unshift(`${inputTestCases.length}`);
-
-    console.log("Initialising A New C++ Docker Container");
+    console.log("Input test cases:", inputTestCases);
+    console.log("Output test cases:", outputTestCases);
 
     const escapedCode = code.replace(/'/g, `'\\"'`);
     const escapedInput = inputTestCases.join(" ").replace(/'/g, `'\\"'`);
     const runCommand = `echo '${escapedCode}' > main.cpp && g++ main.cpp -o main && echo '${escapedInput}' | ./main`;
 
-    console.log(runCommand);
+    console.log("Run command:", runCommand);
 
     if (!(await isImagePresent(serverConfig.CPP_IMAGE))) {
+      console.log("C++ image not found, pulling image...");
       await pullImage(serverConfig.CPP_IMAGE);
     }
 
@@ -38,8 +38,7 @@ class CPPExecutor implements CodeExecutorStrategy {
     ]);
 
     await cppDockerContainer.start();
-
-    console.log("Started The C++ Docker Container");
+    console.log("Started C++ Docker Container");
 
     const loggerStream = await cppDockerContainer.logs({
       stdout: true,
@@ -57,14 +56,14 @@ class CPPExecutor implements CodeExecutorStrategy {
         loggerStream,
         rawLogBuffer
       );
-
+      console.log("Execution response:", response);
       return { output: response, status: "COMPLETED" };
     } catch (err) {
+      console.error("Execution error:", err);
       return { output: err as string, status: "ERROR" };
     } finally {
-      await cppDockerContainer.remove({
-        force: true,
-      });
+      await cppDockerContainer.remove({ force: true });
+      console.log("C++ Docker Container removed");
     }
   }
 }

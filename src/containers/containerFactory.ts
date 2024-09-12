@@ -5,6 +5,7 @@ async function createContainer(
   cmdExecutable: string[]
 ): Promise<Docker.Container> {
   const docker = new Docker();
+  console.log(`Creating container with image: ${imageName}`);
 
   const container = await docker.createContainer({
     Image: imageName,
@@ -19,6 +20,7 @@ async function createContainer(
     },
   });
 
+  console.log(`Container created: ${container.id}`);
   return container;
 }
 
