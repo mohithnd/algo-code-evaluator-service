@@ -4,37 +4,37 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prebuild": "eslint . --fix",
+    "lint": "eslint . --fix",
+    "prebuild": "npm run lint",
     "build": "tsc",
     "watch": "tsc -w",
     "prestart": "npm run build",
     "start": "node dist/index.js",
-    "dev": "npm run build && concurrently \"npm run watch\" \"nodemon dist/index.js\""
+    "dev": "concurrently \"npm run watch\" \"nodemon dist/index.js\""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@bull-board/express": "^5.21.4",
-    "bullmq": "^5.12.10",
+    "@bull-board/express": "^5.21.6",
+    "bullmq": "^5.13.0",
     "dockerode": "^4.0.2",
-    "express": "^4.19.2",
+    "express": "^4.21.0",
     "ioredis": "^5.4.1",
-    "mongoose": "^8.5.4",
+    "mongoose": "^8.6.2",
     "uuid": "^10.0.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/dockerode": "^3.3.31",
     "@types/express": "^4.17.21",
-    "@types/mongoose": "^5.11.97",
     "@types/uuid": "^10.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.2.0",
-    "@typescript-eslint/parser": "^8.2.0",
-    "concurrently": "^8.2.2",
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
+    "@typescript-eslint/parser": "^8.5.0",
+    "concurrently": "^9.0.1",
     "eslint": "8.57.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "nodemon": "^3.1.4",
-    "typescript": "^5.5.4"
+    "typescript": "^5.6.2"
   }
 }
